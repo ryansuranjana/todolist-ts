@@ -11,14 +11,14 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-8 col-12">
-          <h2 class="text-center my-4">Todolist</h2>
+          <h2 class="text-center my-4">Todolist with Typescript</h2>
           <div class="row justify-content-center">
             <div class="col-md-6 col-12">
               <div class="card shadow-sm">
                 <div class="card-body">
-                  <form action="">
-                    <input type="text" class="form-control" placeholder="todo...">
-                    <button class="btn btn-primary btn-sm mt-2">Add Todo</button>
+                  <form action="" id="form-todo">
+                    <input type="text" class="form-control" placeholder="todo..." id="todo" required>
+                    <button class="btn btn-primary btn-sm mt-2" type="submit">Add Todo</button>
                   </form>
                 </div>
               </div>
@@ -30,7 +30,7 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody class="tbody"></tbody>
               </table>
             </div>
           </div>

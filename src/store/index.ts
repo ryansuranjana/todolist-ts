@@ -1,8 +1,4 @@
-interface Todos {
-    id: number;
-    todo: string;
-    done: boolean;
-}
+import Todos from "./Todos";
 
 const state = (): Todos[] => {
     const storedData = localStorage.getItem("todos");
@@ -17,7 +13,7 @@ const state = (): Todos[] => {
 
 const save = (todo: string): void => {
     const todos: Todos[] = state();
-    const id: number = Date.now() + Math.random();
+    const id: number = Date.now();
 
     todos.unshift({ id: id, todo: todo, done: false });
     localStorage.setItem("todos", JSON.stringify(todos));
