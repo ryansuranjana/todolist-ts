@@ -1,6 +1,7 @@
 interface Todos {
     id: number;
     todo: string;
+    done: boolean;
 }
 
 const state = (): Todos[] => {
@@ -18,15 +19,15 @@ const save = (todo: string): void => {
     const todos: Todos[] = state();
     const id: number = Date.now() + Math.random();
 
-    todos.unshift({ id: id, todo: todo });
+    todos.unshift({ id: id, todo: todo, done: false });
     localStorage.setItem("todos", JSON.stringify(todos));
 };
 
-const update = (id: number, todo: string): void => {
+const update = (id: number, data: { todo: string, done: boolean }): void => {
     const todos: Todos[] = state();
     const findIndex: number = todos.findIndex((todo) => todo.id === id);
 
-    todos[findIndex] = { id, todo };
+    todos[findIndex] = { id, ...data };
     localStorage.setItem("todos", JSON.stringify(todos));
 };
 
