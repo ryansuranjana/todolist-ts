@@ -1,4 +1,4 @@
-export default interface Todos {
+export default interface Todo {
     id: number;
     todo: string;
     done: boolean;

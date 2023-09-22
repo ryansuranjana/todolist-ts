@@ -1,5 +1,4 @@
-import store from "./store";
-import Todos from "./store/Todos";
+import store, { Todo } from "./store";
 
 const { state, save, update, destroy } = store;
 const table = document.querySelector<HTMLTableElement>(".tbody");
@@ -7,7 +6,7 @@ const inputTodo = document.querySelector<HTMLInputElement>("#todo");
 const formTodo = document.querySelector<HTMLFormElement>("#form-todo");
 
 const updateTable = (): void => {
-    const todos: Todos[] = state();
+    const todos: Todo[] = state();
 
     if (table) {
         table.innerHTML = "";
@@ -16,8 +15,8 @@ const updateTable = (): void => {
             .map(
                 (todo) => `
             <tr>
-                <td><input class="form-check-input" type="checkbox" data-id="${todo.id}" ${todo.done ? 'checked' : ''}></td>
-                <td class="${todo.done ? 'text-decoration-line-through' : ''}">${todo.todo}</td>
+                <td><input class="form-check-input" type="checkbox" data-id="${todo.id}" ${todo.done ? "checked" : ""}></td>
+                <td class="${todo.done ? "text-decoration-line-through" : ""}">${todo.todo}</td>
                 <td>
                     <button class="btn btn-danger btn-sm delete-button" data-id="${todo.id}">Delete</button>
                 </td>
@@ -26,22 +25,8 @@ const updateTable = (): void => {
             )
             .join("");
 
-        const deleteButtons = document.querySelectorAll(".delete-button");
-        deleteButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-                const id = parseInt(button.getAttribute("data-id") || "0", 10);
-                deleteTodo(id);
-            });
-        });
-
-        const checkboxes = document.querySelectorAll(".form-check-input");
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener("change", (e) => {
-                const id = parseInt(checkbox.getAttribute("data-id") || "0", 10);
-                const checked = (e.target as HTMLInputElement).checked;
-                updateDone(id, checked);
-            });
-        });
+        setupDeleteButtonListeners();
+        setupCheckboxListeners();
     }
 };
 
@@ -54,30 +39,43 @@ const addTodo = (e: Event): void => {
     }
 };
 
-// const updateDone = (e: MouseEvent, todo: Todos): void => {
-//     if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') {
-//         const checked = e.target.checked;
-//         update(todo.id, { todo: todo.todo, done: checked });
-//         updateTable();
-//     }
-// };
-
 const updateDone = (id: number, done: boolean): void => {
-    const todos: Todos[] = state()
+    const todos: Todo[] = state();
     const todo = todos.find((todo) => todo.id === id);
-    if(todo) {
-        todo.done = done
-        update(todo.id, { todo: todo.todo, done: todo.done })
+    if (todo) {
+        todo.done = done;
+        update(todo.id, { todo: todo.todo, done: todo.done });
     }
-    updateTable()
-}
+    updateTable();
+};
 
 const deleteTodo = (id: number): void => {
     destroy(id);
     updateTable();
 };
 
-window.addEventListener("load", () => {
+const setupDeleteButtonListeners = (): void => {
+    const deleteButtons = document.querySelectorAll<HTMLButtonElement>(".delete-button");
+    deleteButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const id: number = parseInt(button.getAttribute("data-id") || "0", 10);
+            deleteTodo(id);
+        });
+    });
+}
+
+const setupCheckboxListeners = (): void => {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(".form-check-input");
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", (e) => {
+            const id: number = parseInt(checkbox.getAttribute("data-id") || "0", 10);
+            const checked: boolean = (e.target as HTMLInputElement).checked;
+            updateDone(id, checked);
+        });
+    });
+}
+
+window.addEventListener("load", (): void => {
     updateTable();
     formTodo?.addEventListener("submit", addTodo);
 });
